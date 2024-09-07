@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "dbrefresh": "php artisan migrate:fresh && php artisan migrate --path=\"database/migrations/*\" && php artisan migrate --path=\"database/migrations/*/*\" --seed && php artisan passport:client --personal"
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
