@@ -1,0 +1,48 @@
+***/ composer create-project laravel/laravel tp_meal
+***/ db create
+***/ env setup
+***/ composer require laravel/passport
+***/ php artisan passport:install
+***/ php artisan migrate
+***/ In config/auth.php file:
+            'guards' => [
+                'api' => [
+                    'driver' => 'passport',
+                    'provider' => 'users',
+                ],
+            ],
+
+***/In app/Models/User.php file:
+            use Laravel\Passport\HasApiTokens;
+            ----
+            class User extends Authenticatable
+            {
+                use HasApiTokens;
+            }
+
+***/ composer require laravel/ui
+***/ php artisan ui vue
+***/ npm install pinia
+***/ npm install vue-router@4
+
+
+
+
+
+----- view ------
+***/ Auth/login file attache , layout folder ta lagbe
+***/ app.blade.php file attache korte hobe. akhanei muloto app component add kora hobe. ebong shokol file add linked hobe
+
+---- js --------
+
+***/common_types folder copy
+***/plugins folder copy . for axios setup,sweet_alert function, number translate
+***/ auth_store copy for authentication
+***/ app.js setup with pinia ,router . copy axisting project
+***/
+***/
+
+
+
+
+
