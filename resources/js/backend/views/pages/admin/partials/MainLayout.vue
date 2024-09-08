@@ -55,11 +55,10 @@
 
 <script>
 import axios from 'axios';
-import Create from '../pages/user/Create.vue';
 import DropdownNav from './DropdownNav.vue';
 import Sidebar from './Sidebar.vue';
 export default {
-    components: { DropdownNav, Create, Sidebar },
+    components: { DropdownNav, Sidebar },
 
     methods:{
         logout:async function(){

@@ -5,7 +5,7 @@
 </template>
 <script>
 import { mapState,mapActions } from 'pinia';
-import { use_auth_store} from './store/auth_store'
+import { use_auth_store} from '../store/auth_store'
 export default {
     data: ()=>({
     }),

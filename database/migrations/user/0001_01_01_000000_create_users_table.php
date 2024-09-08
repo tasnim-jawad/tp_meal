@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('whatsapp')->nullable();
             $table->string('telegram')->nullable();
             $table->string('address')->nullable();
+            $table->string('password')->nullable();
             $table->string('slug', 255)->nullable();
             $table->bigInteger('creator')->nullable();
             $table->string('status')->default('active');

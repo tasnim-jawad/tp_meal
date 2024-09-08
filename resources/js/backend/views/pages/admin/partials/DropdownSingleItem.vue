@@ -1,5 +1,5 @@
 <template lang="">
-    <li>
+    <li :class="{ active: isActive }">
         <span>
             <i class="fa-solid fa-circle-chevron-right"></i>
         </span>
@@ -14,6 +14,13 @@ export default {
     methods: {
         navigate() {
             this.$refs.link.click();
+        }
+    },
+    computed: {
+        isActive:function() {
+            console.log("path",this.$route.path);
+            console.log('to',this.to);
+            return this.$route.path === this.to;
         }
     }
 }

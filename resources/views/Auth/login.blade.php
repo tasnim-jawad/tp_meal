@@ -86,14 +86,17 @@
                                             target.classList.remove('d-none');
                                         } else {
                                             localStorage.setItem('token', data.access_token);
-                                            if(data.user.role == 1){
+                                            if(data.user.user_role_serial == 1){
                                                 console.log('super_admin');
                                                 window.location.href = '/';
-                                            }else if(data.user.role == 2){
+                                            }else if(data.user.user_role_serial == 2){
                                                 console.log('admin');
                                                 window.location.href = '/';
-                                            }else if(data.user.role == 3){
-                                                console.log('user');
+                                            }else if(data.user.user_role_serial == 3){
+                                                console.log('student');
+                                                window.location.href = '/';
+                                            }else if(data.user.user_role_serial == 4){
+                                                console.log('employee');
                                                 window.location.href = '/';
                                             }
 

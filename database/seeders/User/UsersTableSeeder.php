@@ -20,8 +20,8 @@ class UsersTableSeeder extends Seeder
             'user_role_serial' => 1,
             'department_id' => 1,
             'batch_id' => 1,
-            'name' => 'John Doe',
-            'email' => 'johndoe@example.com',
+            'name' => 'Super Admin',
+            'email' => 'super_admin@gmail.com',
             'email_verified_at' => now(),
             'image' => 'john_doe.jpg',
             'gender' => 'male',
@@ -29,6 +29,7 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '1234567890',
             'telegram' => 'john_doe',
             'address' => '123 Main St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('John Doe'),
             'creator' => 1,
             'status' => 'active',
@@ -38,8 +39,8 @@ class UsersTableSeeder extends Seeder
             'user_role_serial' => 2,
             'department_id' => 2,
             'batch_id' => 2,
-            'name' => 'Jane Smith',
-            'email' => 'janesmith@example.com',
+            'name' => 'admin',
+            'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
             'image' => 'jane_smith.jpg',
             'gender' => 'female',
@@ -47,6 +48,7 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '0987654321',
             'telegram' => 'jane_smith',
             'address' => '456 Elm St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Jane Smith'),
             'creator' => 1,
             'status' => 'active',
@@ -65,6 +67,7 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '1112223333',
             'telegram' => 'michael_johnson',
             'address' => '789 Oak St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Michael Johnson'),
             'creator' => 2,
             'status' => 'active',
@@ -83,13 +86,14 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '2223334444',
             'telegram' => 'emily_davis',
             'address' => '123 Pine St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Emily Davis'),
             'creator' => 2,
             'status' => 'active',
         ]);
 
         User::create([
-            'user_role_serial' => 1,
+            'user_role_serial' => 3,
             'department_id' => 3,
             'batch_id' => 5,
             'name' => 'David Brown',
@@ -101,13 +105,14 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '3334445555',
             'telegram' => 'david_brown',
             'address' => '456 Cedar St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('David Brown'),
             'creator' => 3,
             'status' => 'active',
         ]);
 
         User::create([
-            'user_role_serial' => 2,
+            'user_role_serial' => 3,
             'department_id' => 4,
             'batch_id' => 6,
             'name' => 'Laura Wilson',
@@ -119,6 +124,7 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '4445556666',
             'telegram' => 'laura_wilson',
             'address' => '789 Maple St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Laura Wilson'),
             'creator' => 3,
             'status' => 'active',
@@ -137,6 +143,7 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '5556667777',
             'telegram' => 'james_miller',
             'address' => '123 Birch St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('James Miller'),
             'creator' => 4,
             'status' => 'active',
@@ -155,13 +162,14 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '6667778888',
             'telegram' => 'sara_taylor',
             'address' => '456 Spruce St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Sara Taylor'),
             'creator' => 4,
             'status' => 'active',
         ]);
 
         User::create([
-            'user_role_serial' => 1,
+            'user_role_serial' => 3,
             'department_id' => 6,
             'batch_id' => 9,
             'name' => 'Daniel Martinez',
@@ -173,13 +181,14 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '7778889999',
             'telegram' => 'daniel_martinez',
             'address' => '789 Redwood St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Daniel Martinez'),
             'creator' => 5,
             'status' => 'active',
         ]);
 
         User::create([
-            'user_role_serial' => 2,
+            'user_role_serial' => 3,
             'department_id' => 6,
             'batch_id' => 10,
             'name' => 'Megan Clark',
@@ -191,10 +200,10 @@ class UsersTableSeeder extends Seeder
             'whatsapp' => '8889990000',
             'telegram' => 'megan_clark',
             'address' => '123 Walnut St',
+            'password' => Hash::make('12345678'),
             'slug' => Str::slug('Megan Clark'),
             'creator' => 5,
             'status' => 'active',
         ]);
-
     }
 }
