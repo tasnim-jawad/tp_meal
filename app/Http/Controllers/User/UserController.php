@@ -83,7 +83,7 @@ class UserController extends Controller
     }
     public function store()
     {
-        // dd(request()->all(),auth()->user(),request()->password);
+        dd(request()->all(),auth()->user(),request()->password);
         $validator = Validator::make(request()->all(), [
             'name' => ['required'],
             'role' => ['required'],

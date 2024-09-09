@@ -25,12 +25,6 @@ export default [
         value: "",
     },
     {
-        name: "image",
-        label: "Image",
-        type: "file",
-        value: "",
-    },
-    {
         name: "address",
         label: "Address",
         type: "text",

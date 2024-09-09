@@ -4,7 +4,7 @@
         <div class="selected_list" @click="show_list = true">
             <div v-for="item in selected" :key="item.id" :id="item.id" class="selected_item">
                 <div class="label">
-                    {{ item.title }}
+                    {{ item.name }}
                 </div>
                 <div @click.prevent="remove_item(item)" class="remove">
                     <i class="fa fa-close"></i>
@@ -25,7 +25,7 @@
                 </button>
             </div>
             <ul class="option_list custom_scroll">
-                <li class="option_item" v-for="item in value" :key="item.id">
+                <li class="option_item" v-for="item in all.data" :key="item.id">
                     <label :for="`drop_item_${item.id}`">
                         <div class="check_box">
                             <input @change="set_selected(item, $event)"
@@ -33,7 +33,7 @@
                                 type="checkbox" :id="`drop_item_${item.id}`"
                                 class="form-check-input ml-0">
                         </div>
-                        <div class="label">{{ item.title }}</div>
+                        <div class="label">{{ item.name }}</div>
                     </label>
                 </li>
             </ul>
