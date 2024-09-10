@@ -23,14 +23,18 @@
                                 :class="form_field.row_col_class ? form_field.row_col_class : `col-md-12 mb-2`">
                                 <div class="form-group">
                                     <label :for="form_field.name">{{ form_field.label }}</label>
-                                    <input :type="form_field.type" class="form-control" v-model="form_field.value" :name="form_field.name" :id="form_field.name" :placeholder="`Enter ` + form_field.label" required />
+                                    <input  :type="form_field.type" class="form-control"
+                                            v-model="form_field.value" :name="form_field.name"
+                                            :id="form_field.name"
+                                            :placeholder="`Enter ` + form_field.label"
+                                            required />
                                 </div>
                             </div>
                         </template>
                     </div>
                     <div class="row">
                         <div class="form-group mb-2">
-                            <label for="batch_id"> Profile Image </label>
+                            <label for="image"> Profile Image </label>
                             <image-component name="image"> </image-component>
                         </div>
                         <div class="form-group mb-2">
@@ -65,6 +69,16 @@
                                 </select>
                             </div>
                         </template>
+
+                        <div class="form-group mb-2">
+                                <label for="status"> Status </label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="">--- Select status ---</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+
+                                </select>
+                            </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -177,7 +191,10 @@
                 if ($event.target.value == 3) {
                     this.isDepartment = true;
                     this.isBatch = true;
-                } else {
+                } else if($event.target.value == 4){
+                    this.isDepartment = true;
+                    this.isBatch = false;
+                }else{
                     this.isDepartment = false;
                     this.isBatch = false;
                 }

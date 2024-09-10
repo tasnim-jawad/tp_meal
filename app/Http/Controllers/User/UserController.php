@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -83,13 +84,35 @@ class UserController extends Controller
     }
     public function store()
     {
-        dd(request()->all(),auth()->user(),request()->password);
+        // dd(request()->all(),auth()->user(),request()->password);
         $validator = Validator::make(request()->all(), [
+            'user_role_serial' => ['required'],
+            'department_id' => ['sometimes','required'],
+            'batch_id' => ['sometimes','required'],
             'name' => ['required'],
-            'role' => ['required'],
-            'email' => ['required'],
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('users', 'email'),
+            ],
+            'image' => ['required'],
+            'gender' => ['required'],
+            'mobile' => [
+                'nullable',
+                Rule::unique('users', 'mobile'),
+            ],
+            'whatsapp' => ['nullable'],
+            'telegram' => ['nullable'],
+            'address' => ['required'],
             'password' => ['required','confirmed','min:8'],
-        ]);
+            'status' => ['required'],
+        ])->after(function ($validator) {
+            $data = request()->all();
+            if (empty($data['mobile']) && empty($data['email'])) {
+                $validator->errors()->add('mobile', 'Either mobile or email is required.');
+                $validator->errors()->add('email', 'Either mobile or email is required.');
+            }
+        });
 
         if ($validator->fails()) {
             return response()->json([
@@ -102,8 +125,10 @@ class UserController extends Controller
         $slug = Str::slug(request()->name) . '-' . $randomNumber;
 
         $data = new User();
-        $data->full_name = request()->full_name;
-        $data->role = request()->role;
+        $data->user_role_serial = request()->user_role_serial;
+        $data->department_id = request()->department_id ?? null;
+        $data->batch_id = request()->batch_id ?? null;
+        $data->name = request()->name;
         $data->email = request()->email;
         $data->password = Hash::make(request()->password);
         $data->slug = $slug;
