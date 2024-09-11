@@ -30,7 +30,7 @@ const routes =
         {
             path: "edit/:id",
             name: "Edit" + route_prefix,
-            component: Edit,
+            component: Form,
         },
 
     ]

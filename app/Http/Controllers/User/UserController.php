@@ -95,7 +95,7 @@ class UserController extends Controller
                 'email',
                 Rule::unique('users', 'email'),
             ],
-            'image' => ['required'],
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max size
             'gender' => ['required'],
             'mobile' => [
                 'nullable',
@@ -124,24 +124,38 @@ class UserController extends Controller
         $randomNumber = rand(1000, 9999);
         $slug = Str::slug(request()->name) . '-' . $randomNumber;
 
+
+
         $data = new User();
         $data->user_role_serial = request()->user_role_serial;
         $data->department_id = request()->department_id ?? null;
         $data->batch_id = request()->batch_id ?? null;
         $data->name = request()->name;
-        $data->email = request()->email;
+        $data->email = request()->email ?? null;
+        if (request()->hasFile('image')) {
+            $image_file_path = upload_image(request()->image,request()->name , null);
+            $data->image = $image_file_path;
+        }
+        $data->gender = request()->gender;
+        $data->mobile = request()->mobile ?? null;
+        $data->whatsapp = request()->whatsapp ?? null;
+        $data->telegram = request()->telegram ?? null;
+        $data->address = request()->address ?? null;
         $data->password = Hash::make(request()->password);
+
         $data->slug = $slug;
         $data->creator = auth()->id();
-        $data->status = 1;
+        $data->status = request()->status ?? 'active';
         $data->save();
 
         return response()->json($data, 200);
     }
 
-    public function update()
+    public function update($slug)
     {
-        $data = User::find(request()->id);
+        // dd($data, request()->all());
+        // dd(request()->all(),$slug);
+        $data = User::where('slug', $slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -150,11 +164,33 @@ class UserController extends Controller
         }
         // dd($data, request()->all());
         $validator = Validator::make(request()->all(), [
-            'full_name' => ['required'],
-            'role' => ['required'],
-            'email' => ['required'],
-            'password' => ['sometimes','nullable','min:8','confirmed'],
-        ]);
+            'user_role_serial' => ['required'],
+            'department_id' => ['sometimes','required'],
+            'batch_id' => ['sometimes','required'],
+            'name' => ['required'],
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('users', 'email')->ignore($data->id),
+            ],
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max size
+            'gender' => ['required'],
+            'mobile' => [
+                'nullable',
+                Rule::unique('users', 'mobile')->ignore($data->id),
+            ],
+            'whatsapp' => ['nullable'],
+            'telegram' => ['nullable'],
+            'address' => ['required'],
+            'password' => ['required','confirmed','min:8'],
+            'status' => ['required'],
+        ])->after(function ($validator) {
+            $data = request()->all();
+            if (empty($data['mobile']) && empty($data['email'])) {
+                $validator->errors()->add('mobile', 'Either mobile or email is required.');
+                $validator->errors()->add('email', 'Either mobile or email is required.');
+            }
+        });
 
         if ($validator->fails()) {
             return response()->json([
@@ -163,19 +199,27 @@ class UserController extends Controller
             ], 422);
         }
 
-        $data->full_name = request()->full_name;
-        $data->role = request()->role;
-        $data->email = request()->email;
-        if(request()->password != ''){
-            $data->password = Hash::make(request()->password);
-        }
-        $data->creator = auth()->id();
-        $data->status = 1;
-        $data->save();
-
+        $data->user_role_serial = request()->user_role_serial;
+        $data->department_id = request()->department_id ?? null;
+        $data->batch_id = request()->batch_id ?? null;
+        $data->name = request()->name;
+        $data->email = request()->email ?? null;
         if (request()->hasFile('image')) {
-            //
+            $image_file_path = upload_image(request()->image, request()->name , $data->image );
+            $data->image = $image_file_path;
         }
+        $data->gender = request()->gender;
+        $data->mobile = request()->mobile ?? null;
+        $data->whatsapp = request()->whatsapp ?? null;
+        $data->telegram = request()->telegram ?? null;
+        $data->address = request()->address ?? null;
+        $data->password = Hash::make(request()->password);
+
+        $data->slug = $slug;
+        $data->creator = auth()->id();
+        $data->status = request()->status ?? 'active';
+        $data->update();
+
         return response()->json([
             'status' => 'success',
             'data' => $data,

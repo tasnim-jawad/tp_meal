@@ -1,19 +1,20 @@
 <template>
     <div class="form-group">
-        <label for="">
+        <label for="" class="mt-1 mb-3">
             {{ label || name }}
         </label>
 
-        <div v-if="['text', 'number', 'password', 'email', 'date', 'month'].includes(type)" class="mt-1 mb-3">
+        <div v-if="['text', 'number', 'password', 'email', 'date', 'month'].includes(type)" class="mt-1 mb-2">
             <input class="form-control form-control-square mb-2"
                 :type="type"
                 :name="name"
                 :id="name"
                 :value="value"
+                :placeholder="placeholder"
                 @change="errorReset" />
         </div>
 
-        <div v-if="type === 'checkbox'" class="mt-1 mb-3">
+        <div v-if="type === 'checkbox'" class="mt-1 mb-2">
             <input
                 :checked="value > 0"
                 :name="name"
@@ -24,14 +25,14 @@
                 type="checkbox">
         </div>
 
-        <div v-if="type === 'textarea'" class="mt-1 mb-3">
+        <div v-if="type === 'textarea'" class="mt-1 mb-2">
             <!-- <textarea class="form-control form-control-square" rows="10"  type="text" :name="name" :value="value"
                 @change="errorReset"></textarea> -->
             <!-- <div :id="name"></div> -->
             <text-editor :name="name" />
         </div>
 
-        <div v-if="type === 'select'" class="mt-1 mb-3">
+        <div v-if="type === 'select'" class="mt-1 mb-2">
             <select :name="name" class="form-control" :id="name" @change="errorReset">
                 <option value="">Select item</option>
                 <option v-for="data in data_list" :key="data" :value="data.value" :selected="data.value == value">
@@ -40,7 +41,7 @@
             </select>
         </div>
 
-        <div v-if="type === 'file'" class="mt-1 mb-3">
+        <div v-if="type === 'file'" class="mt-1 mb-2">
             <image-component :name="name" :multiple="multiple" :accept="`.jpg,.jpeg,.png`"
                 :images="[value]"></image-component>
         </div>
@@ -51,14 +52,14 @@
 <script>
 import TextEditor from './TextEditor.vue';
 import { mapActions, mapState } from 'pinia'
-import { blog_setup_store } from '../pages/admin/management/BlogManagement/Blog/setup/store';
+// import { blog_setup_store } from '../pages/admin/management/BlogManagement/Blog/setup/store';
 /**
  * props:
  */
 export default {
-    components: { TextEditor },
+    components: { TextEditor  },
     data: () => ({
-        tag_input_value: ''
+        // tag_input_value: ''
     }),
     props: {
         name: {
@@ -84,14 +85,19 @@ export default {
             required: false,
             type: Array,
         },
+        placeholder: {
+            required: false,
+            type: String,
+            default: '',
+        },
 
     },
 
     methods: {
-        ...mapActions(blog_setup_store, {
-            set_tags: 'set_tags',
-            remove_tag: 'remove_tag',
-        }),
+        // ...mapActions(blog_setup_store, {
+        //     set_tags: 'set_tags',
+        //     remove_tag: 'remove_tag',
+        // }),
         errorReset(event) {
             let currentElement = event.target
             let nextElement = currentElement.nextElementSibling;
@@ -100,15 +106,15 @@ export default {
                 nextElement.remove()
             }
         },
-        onEnter: function () {
-            event.preventDefault()
-            this.set_tags(this.tag_input_value)
-            this.tag_input_value = ''
-        },
-        removeTag: function (item) {
+        // onEnter: function () {
+        //     event.preventDefault()
+        //     this.set_tags(this.tag_input_value)
+        //     this.tag_input_value = ''
+        // },
+        // removeTag: function (item) {
 
-            this.remove_tag(item)
-        }
+        //     this.remove_tag(item)
+        // }
     },
     created: async function () {
         // this.tags = this.value
@@ -118,9 +124,9 @@ export default {
         // }, 1000)
     },
     computed: {
-        ...mapState(blog_setup_store, {
-            set_blog_tags: 'set_blog_tags',
-        }),
+        // ...mapState(blog_setup_store, {
+        //     set_blog_tags: 'set_blog_tags',
+        // }),
     },
 
 

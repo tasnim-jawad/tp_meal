@@ -19,51 +19,91 @@
                                             <img :src="item.image" alt="">
                                         </th>
                                     </tr> -->
-                                    <tr>
-                                        <th>Name</th>
+                                    <tr class="border-bottom">
+                                        <th>Title</th>
                                         <th>:</th>
                                         <th>
-                                            {{ item.full_name }}
+                                            Value
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>Role</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.role }}
-                                        </th>
+                                        <td>Name</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.name }}
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th>Email</th>
-                                        <th>:</th>
-                                        <th>
+                                        <td>Role</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.user_role_serial }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Department</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.department_id }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Batch</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.batch_id }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>:</td>
+                                        <td>
                                             {{ item.email }}
-                                        </th>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th>Slug</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.slug }}
-                                        </th>
+                                        <td>image</td>
+                                        <td>:</td>
+                                        <td>
+                                            <img :src="item.image" alt="" widtd="150">
+                                        </td>
                                     </tr>
-                                    <!-- <tr>
-                                        <th>Is Featured</th>
-                                        <th>:</th>
-                                        <th>
-                                            <input
-                                                :checked="item.is_featured"
-                                                class="form-check-input ml-0"
-                                                type="checkbox">
-                                        </th>
-                                    </tr> -->
-                                    <!-- <tr>
-                                        <th>Serial</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.serial }}
-                                        </th>
-                                    </tr> -->
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.gender }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.mobile }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Whatsapp</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.whatsapp }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Telegram</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.telegram }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Address</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.address }}
+                                        </td>
+                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>

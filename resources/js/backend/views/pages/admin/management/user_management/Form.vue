@@ -7,7 +7,7 @@
                         {{ param_id ? "Update" : "Create" }} new {{ route_prefix }}
                     </h5>
                     <div>
-                        <router-link v-if="item.slug" class="btn btn-outline-info mr-2 btn-sm"
+                        <router-link v-if="item.slug" class="btn btn-outline-info me-2 btn-sm"
                             :to="{ name: `Details${route_prefix}`, params: { id: item.slug },}">
                             Details {{ route_prefix }}
                         </router-link>
@@ -18,38 +18,58 @@
                 </div>
                 <div class="card-body card_body_fixed_height">
                     <div class="row">
-                        <template v-for="(form_field, index) in form_fields" :key="index">
+                        <!-- <template v-for="(form_field, index) in form_fields" :key="index">
                             <div
                                 :class="form_field.row_col_class ? form_field.row_col_class : `col-md-12 mb-2`">
                                 <div class="form-group">
                                     <label :for="form_field.name">{{ form_field.label }}</label>
                                     <input  :type="form_field.type" class="form-control"
-                                            v-model="form_field.value" :name="form_field.name"
+                                            v-model="form_field.value"
+                                            :name="form_field.name"
                                             :id="form_field.name"
-                                            :placeholder="`Enter ` + form_field.label"
-                                            required />
+                                            :placeholder="`Enter ` + form_field.label"/>
                                 </div>
+                            </div>
+                        </template> -->
+                        <template v-for="(form_field, index) in form_fields" :key="index">
+                            <div :class="form_field.row_col_class ? form_field.row_col_class : `col-md-12`">
+                                <common-input   :label="form_field.label"
+                                                :type="form_field.type"
+                                                :name="form_field.name"
+                                                :multiple="form_field.multiple" :value="form_field.value"
+                                                :data_list="form_field.data_list"
+                                                :placeholder="`Enter ` + form_field.label"/>
                             </div>
                         </template>
                     </div>
                     <div class="row">
-                        <div class="form-group mb-2">
+                        <!-- <div class="form-group mb-2">
                             <label for="image"> Profile Image </label>
-                            <image-component name="image"> </image-component>
+                            <image-component name="image" :images="previous_image"> </image-component>
+                        </div> -->
+
+                        <div class="form-group mb-2">
+                            <label for="gender">Gender</label>
+                            <select name="gender" id="gender" class="form-control" v-model="gender">
+                                <option value="">--- select Gender ---</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
                         </div>
+
                         <div class="form-group mb-2">
                             <label for="user_role_serial">Role</label>
-                            <select name="user_role_serial" id="user_role_serial" class="form-control" @change="on_role_change($event)">
+                            <select name="user_role_serial" id="user_role_serial" class="form-control" v-model="user_role_serial">
                                 <option value="">--- select role ---</option>
                                 <option v-for="role in roles" :value="role.serial" :key="role">
                                     {{ role.title }}
                                 </option>
                             </select>
                         </div>
-                        <template v-if="isDepartment">
+                        <template v-if="user_role_serial == 3 || user_role_serial == 4">
                             <div class="form-group mb-2">
                                 <label for="department_id"> Department </label>
-                                <select name="department_id" id="department_id" class="form-control" @change.prevent="on_department_change">
+                                <select name="department_id" id="department_id" class="form-control" v-model="department_id" >
                                     <option value="">--- Select Department ---</option>
                                     <option v-for="department in departments" :value="department.id" :key="department">
                                         {{ department.title }}
@@ -58,10 +78,10 @@
                             </div>
                         </template>
 
-                        <template v-if="isBatch">
+                        <template v-if="user_role_serial == 3">
                             <div class="form-group mb-2">
                                 <label for="batch_id"> Batch </label>
-                                <select name="batch_id" id="batch_id" class="form-control" @change.prevent="on_batch_change">
+                                <select name="batch_id" id="batch_id" class="form-control" v-model="batch_id" >
                                     <option value="">--- Select Department ---</option>
                                     <option v-for="batch in batchs" :value="batch.id" :key="batch">
                                         {{ batch.title }}
@@ -72,7 +92,7 @@
 
                         <div class="form-group mb-2">
                                 <label for="status"> Status </label>
-                                <select name="status" id="status" class="form-control">
+                                <select name="status" id="status" class="form-control" v-model="status">
                                     <option value="">--- Select status ---</option>
                                     <option value="active">Active</option>
                                     <option value="inactive">Inactive</option>
@@ -107,12 +127,16 @@
             route_prefix: "",
             form_fields,
             param_id: null,
+            gender: "",
             user_role_serial: "",
             department_id: "",
             batch_id: "",
+            status: "",
 
-            isDepartment: false,
-            isBatch: false,
+            // isDepartment: false,
+            // isBatch: false,
+
+            // previous_image:'',
 
             roles: [
                 { serial: "2", title: "Admin" },
@@ -166,6 +190,14 @@
                             }
                         });
                     });
+
+                    this.gender = this.item.gender ?? "";
+                    this.user_role_serial = this.item.user_role_serial ?? "";
+                    this.department_id = this.item.department_id ?? "";
+                    this.batch_id = this.item.batch_id ?? "";
+                    this.status = this.item.status ?? "";
+
+
                 }
             },
 
@@ -185,27 +217,27 @@
                 }
             },
 
-            on_role_change($event) {
-                $event.preventDefault();
-                this.user_role_serial = $event.target.value;
-                if ($event.target.value == 3) {
-                    this.isDepartment = true;
-                    this.isBatch = true;
-                } else if($event.target.value == 4){
-                    this.isDepartment = true;
-                    this.isBatch = false;
-                }else{
-                    this.isDepartment = false;
-                    this.isBatch = false;
-                }
-            },
+            // on_role_change($event) {
+            //     $event.preventDefault();
+            //     this.user_role_serial = $event.target.value;
+            //     if ($event.target.value == 3) {
+            //         this.isDepartment = true;
+            //         this.isBatch = true;
+            //     } else if($event.target.value == 4){
+            //         this.isDepartment = true;
+            //         this.isBatch = false;
+            //     }else{
+            //         this.isDepartment = false;
+            //         this.isBatch = false;
+            //     }
+            // },
 
-            on_department_change($event) {
-                this.department_id = $event.target.value;
-            },
-            on_batch_change($event) {
-                this.batch_id = $event.target.value;
-            },
+            // on_department_change($event) {
+            //     this.department_id = $event.target.value;
+            // },
+            // on_batch_change($event) {
+            //     this.batch_id = $event.target.value;
+            // },
         },
 
         computed: {

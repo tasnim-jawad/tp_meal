@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('image')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
-            $table->string('mobile')->unique();
+            $table->string('mobile')->unique()->nullable();
             $table->string('whatsapp')->nullable();
             $table->string('telegram')->nullable();
             $table->string('address')->nullable();

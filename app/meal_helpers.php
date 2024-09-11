@@ -1,29 +1,21 @@
 <?php
+
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
-function upload_image($uploded_image,$name)
+function upload_image($uploded_image, $name , $previous_image_path)
 {
-
-    // 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max size
-
-    if ($uploded_image->hasFile('image')) {
-        $image = $uploded_image->file('image');
-        $name_slug = Str::slug($name, '_');
-
-        $imageName = time() . '_' . $name_slug . '.' .$image->getClientOriginalExtension();
-
-        // Move the image to the 'public/images' directory
-        $image->move(public_path('images'), $imageName);
-
-        // Return the file path relative to the public directory
-        return 'images/' . $imageName;
+    if ($previous_image_path != null && File::exists(public_path($previous_image_path))) {
+        File::delete(public_path($previous_image_path));
     }
+    $image = $uploded_image;
+    $name_slug = Str::slug($name, '_');
 
-    return null;
+    $imageName = time() . '_' . $name_slug . '.' .$image->getClientOriginalExtension();
+    $image->move(public_path('images'), $imageName);
+
+    return 'images/' . $imageName;
 }
-
-
-
 
 ?>
 

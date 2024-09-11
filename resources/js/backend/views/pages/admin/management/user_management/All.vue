@@ -39,7 +39,7 @@
                                             {{ item.id }}
                                         </td>
                                         <td>
-                                            {{ item.image }}
+                                            <img :src="item.image" alt="" height="30">
                                         </td>
                                         <td>
                                             {{ item.name }}

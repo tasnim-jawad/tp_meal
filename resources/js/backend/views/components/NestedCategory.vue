@@ -21,7 +21,7 @@
 
 <script>
 import { mapActions, mapState } from 'pinia'
-import { blog_setup_store } from '../pages/admin/management/BlogManagement/Blog/setup/store';
+// import { blog_setup_store } from '../pages/admin/management/BlogManagement/Blog/setup/store';
 
 export default {
 
@@ -32,9 +32,9 @@ export default {
     ],
 
     methods: {
-        ...mapActions(blog_setup_store, {
-            set_categories: 'set_categories',
-        }),
+        // ...mapActions(blog_setup_store, {
+        //     set_categories: 'set_categories',
+        // }),
         showSubCategory() {
             let target = event.target
             target.parentNode.parentNode.nextSibling.classList.toggle('d-block');
@@ -44,9 +44,9 @@ export default {
         }
     },
     computed: {
-        ...mapState(blog_setup_store, {
-            set_categories_data: 'set_categories_data',
-        }),
+        // ...mapState(blog_setup_store, {
+        //     set_categories_data: 'set_categories_data',
+        // }),
     },
 
 }

@@ -43,5 +43,12 @@ export default [
         type: "password",
         value: "",
     },
+    {
+        name: "image",
+        label: "Upload Image",
+        type: "file",
+        value: "",
+    },
+
 
 ];
