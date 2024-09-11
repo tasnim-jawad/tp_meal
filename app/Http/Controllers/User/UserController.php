@@ -241,7 +241,7 @@ class UserController extends Controller
         }
 
         $data = User::where('slug',request()->slug)->first();
-        $data->status = 0;
+        $data->status = "inactive";
         $data->save();
 
         return response()->json([
@@ -281,7 +281,7 @@ class UserController extends Controller
         }
 
         $data = User::find(request()->id);
-        $data->status = 1;
+        $data->status = 'active';
         $data->save();
 
         return response()->json([
