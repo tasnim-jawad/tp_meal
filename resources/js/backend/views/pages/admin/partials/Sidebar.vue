@@ -42,6 +42,15 @@
                             :label="`create`"/>
                     </dropdown-nav>
 
+                    <dropdown-nav :label="`Settings`" :icon="`fa-solid fa-users`">
+                        <dropdown-single-item
+                            :to="{name:`Allsetting`}"
+                            :label="`all`"/>
+                        <dropdown-single-item
+                            :to="{name:`Createsetting`}"
+                            :label="`create`"/>
+                    </dropdown-nav>
+
                 </ul>
 
                 <div class="line_divider"></div>

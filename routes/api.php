@@ -41,6 +41,18 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function(){
         Route::get('{slug}', [App\Http\Controllers\Admin\BatchController::class,'show']);
     });
 
+    Route::group(['prefix' => 'settings'], function(){
+        Route::get('', [App\Http\Controllers\Admin\SettingController::class,'index']);
+        Route::post('store', [App\Http\Controllers\Admin\SettingController::class,'store']);
+        Route::post('update/{id}', [App\Http\Controllers\Admin\SettingController::class,'update']);
+        Route::post('soft-delete', [App\Http\Controllers\Admin\SettingController::class,'soft_delete']);
+        Route::delete('destroy/{slug}', [App\Http\Controllers\Admin\SettingController::class,'destroy']);
+        Route::post('restore', [App\Http\Controllers\Admin\SettingController::class,'restore']);
+        Route::post('import', [App\Http\Controllers\Admin\SettingController::class,'import']);
+        Route::post('bulk-action', [App\Http\Controllers\Admin\SettingController::class, 'bulkAction']);
+        Route::get('{slug}', [App\Http\Controllers\Admin\SettingController::class,'show']);
+    });
+
 });
 
 

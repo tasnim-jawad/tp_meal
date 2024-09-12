@@ -16,9 +16,16 @@
                                             <select-all />
                                         </th>
                                         <th class="w-10"> ID </th>
-                                        <th> Batch Title </th>
-                                        <th> Department </th>
-                                        <th> Description </th>
+                                        <th> address </th>
+                                        <th> contact_name </th>
+                                        <th> contact_number </th>
+                                        <th> meal_booking_last_time </th>
+                                        <th> meal_booking_alert_time </th>
+                                        <th> meal_booking_alert_text_for_all </th>
+                                        <th> meal_booking_minimum_amount </th>
+                                        <th> shut_down_app </th>
+                                        <th> shut_down_reason </th>
+                                        <th> notice </th>
                                     </tr>
                                 </thead>
                                 <tbody v-if="all?.data?.length">
@@ -34,13 +41,34 @@
                                             {{ item.id }}
                                         </td>
                                         <td>
-                                            {{ item.title }}
+                                            {{ item.address }}
                                         </td>
                                         <td>
-                                            {{ item.department?.title }}
+                                            {{ item.contact_name }}
                                         </td>
                                         <td>
-                                            {{ item.description }}
+                                            {{ item.contact_number }}
+                                        </td>
+                                        <td>
+                                            {{ item.meal_booking_last_time }}
+                                        </td>
+                                        <td>
+                                            {{ item.meal_booking_alert_time }}
+                                        </td>
+                                        <td>
+                                            {{ item.meal_booking_alert_text_for_all }}
+                                        </td>
+                                        <td>
+                                            {{ item.meal_booking_minimum_amount }}
+                                        </td>
+                                        <td>
+                                            {{ item.shut_down_app }}
+                                        </td>
+                                        <td>
+                                            {{ item.shut_down_reason }}
+                                        </td>
+                                        <td>
+                                            {{ item.notice }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -95,7 +123,6 @@ export default {
     created: async function () {
         this.paginate = 10;
         await this.get_all_data();
-
     },
     methods: {
         ...mapActions(data_store,[

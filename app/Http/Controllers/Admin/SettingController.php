@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Batch;
+use App\Models\Admin\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class BatchController extends Controller
+class SettingController extends Controller
 {
     public function index(){
         // dd('index is called');
@@ -17,15 +18,15 @@ class BatchController extends Controller
         $orderByType = request()->input('sort_type');
         $status = request()->input('status');
         $fields = request()->input('fields');
-        $with = ['department'];
+        $with = [];
         $condition = [];
-        $data = Batch::query();
+        $data = Setting::query();
 
         if (request()->has('search') && request()->input('search')) {
             $searchKey = request()->input('search');
             $data = $data->where(function ($q) use ($searchKey) {
-                $q->where('title','like', '%' . $searchKey . '%')
-                ->orWhere('description', 'like', '%' . $searchKey . '%');
+                $q->where('address','like', '%' . $searchKey . '%')
+                ->orWhere('contact_name', 'like', '%' . $searchKey . '%');
             });
         }
 
@@ -56,12 +57,12 @@ class BatchController extends Controller
 
     public function show($slug)
     {
-        $with = ['department'];
+        $with = [];
         $select = ["*"];
         if (request()->has('select_all') && request()->select_all) {
             $select = "*";
         }
-        $data = Batch::where('slug', $slug)
+        $data = Setting::where('slug', $slug)
             ->select($select)
             ->with($with)
             ->first();
@@ -83,9 +84,16 @@ class BatchController extends Controller
     {
         // dd(request()->all(),auth()->user(),request()->password);
         $validator = Validator::make(request()->all(), [
-            'department_id' => ['required'],
-            'title' => ['required'],
-            'description' => ['nullable'],
+            'address' => ['required'],
+            'contact_name' => ['required'],
+            'contact_number' => ['required'],
+            'meal_booking_last_time' => ['required'],
+            'meal_booking_alert_time' => ['required'],
+            'meal_booking_alert_text_for_all' => ['required'],
+            'meal_booking_minimum_amount' => ['required'],
+            'shut_down_app' => ['nullable'],
+            'shut_down_reason' => ['sometimes','required'],
+            'notice' => ['nullable'],
             'status' => ['required'],
         ]);
 
@@ -96,27 +104,39 @@ class BatchController extends Controller
             ], 422);
         }
 
-        $randomNumber = rand(1000, 9999);
-        $slug = Str::slug(request()->title) . '-' . $randomNumber;
+        Setting::where('status', 'active')->update(['status' => 'inactive']);
 
-        $data = new Batch();
-        $data->department_id = request()->department_id;
-        $data->title = request()->title;
-        $data->description = request()->description ?? null;
+        $randomNumber = rand(1000, 9999);
+        $slug = Str::slug(request()->contact_number) . '-' . $randomNumber;
+
+        $data = new Setting();
+        $data->address = request()->address;
+        $data->contact_name = request()->contact_name;
+        $data->contact_number = request()->contact_number;
+        $data->meal_booking_last_time = request()->meal_booking_last_time;
+        $data->meal_booking_alert_time = request()->meal_booking_alert_time;
+        $data->meal_booking_alert_text_for_all = request()->meal_booking_alert_text_for_all;
+        $data->meal_booking_minimum_amount = request()->meal_booking_minimum_amount;
+        $data->shut_down_app = request()->shut_down_app ?? 'active';
+        $data->shut_down_reason = request()->shut_down_reason ?? null;
+        $data->notice = request()->notice ?? null;
 
         $data->slug = $slug;
         $data->creator = auth()->id();
         $data->status = request()->status ?? 'active';
         $data->save();
 
-        return response()->json($data, 200);
+        return response()->json([
+            'status' => 'success',
+            'data' => $data,
+        ],200);
     }
 
     public function update($slug)
     {
         // dd($data, request()->all());
         // dd(request()->all(),$slug);
-        $data = Batch::where('slug', $slug)->first();
+        $data = Setting::where('slug', $slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -125,9 +145,16 @@ class BatchController extends Controller
         }
         // dd($data, request()->all());
         $validator = Validator::make(request()->all(), [
-            'department_id' => ['required'],
-            'title' => ['required'],
-            'description' => ['nullable'],
+            'address' => ['required'],
+            'contact_name' => ['required'],
+            'contact_number' => ['required'],
+            'meal_booking_last_time' => ['required'],
+            'meal_booking_alert_time' => ['required'],
+            'meal_booking_alert_text_for_all' => ['required'],
+            'meal_booking_minimum_amount' => ['required'],
+            'shut_down_app' => ['nullable'],
+            'shut_down_reason' => ['sometimes','required'],
+            'notice' => ['nullable'],
             'status' => ['required'],
         ]);
 
@@ -138,9 +165,16 @@ class BatchController extends Controller
             ], 422);
         }
 
-        $data->department_id = request()->department_id;
-        $data->title = request()->title;
-        $data->description = request()->description ?? null;
+        $data->address = request()->address;
+        $data->contact_name = request()->contact_name;
+        $data->contact_number = request()->contact_number;
+        $data->meal_booking_last_time = request()->meal_booking_last_time;
+        $data->meal_booking_alert_time = request()->meal_booking_alert_time;
+        $data->meal_booking_alert_text_for_all = request()->meal_booking_alert_text_for_all;
+        $data->meal_booking_minimum_amount = request()->meal_booking_minimum_amount;
+        $data->shut_down_app = request()->shut_down_app ?? 'active';
+        $data->shut_down_reason = request()->shut_down_reason ?? null;
+        $data->notice = request()->notice ?? null;
 
         $data->creator = auth()->id();
         $data->status = request()->status ?? 'active';
@@ -156,7 +190,7 @@ class BatchController extends Controller
     public function soft_delete()
     {
         $validator = Validator::make(request()->all(), [
-            'slug' => ['required', 'exists:batches,slug'],
+            'slug' => ['required', 'exists:settings,slug'],
         ]);
 
         if ($validator->fails()) {
@@ -166,7 +200,7 @@ class BatchController extends Controller
             ], 422);
         }
 
-        $data = Batch::where('slug',request()->slug)->first();
+        $data = Setting::where('slug',request()->slug)->first();
         $data->status = "inactive";
         $data->save();
 
@@ -178,7 +212,7 @@ class BatchController extends Controller
 
     public function destroy()
     {
-        $data = Batch::where('slug',request()->slug)->first();
+        $data = Setting::where('slug',request()->slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -196,7 +230,7 @@ class BatchController extends Controller
     public function restore()
     {
         $validator = Validator::make(request()->all(), [
-            'slug' => ['required', 'exists:batches,slug'],
+            'slug' => ['required', 'exists:settings,slug'],
         ]);
 
         if ($validator->fails()) {
@@ -206,7 +240,7 @@ class BatchController extends Controller
             ], 422);
         }
 
-        $data = Batch::find(request()->id);
+        $data = Setting::find(request()->id);
         $data->status = 'active';
         $data->save();
 

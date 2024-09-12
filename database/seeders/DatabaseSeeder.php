@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Database\Seeders\Admin\BatchesTableSeeder;
 use Database\Seeders\Admin\DepartmentsTableSeeder;
+use Database\Seeders\Admin\SettingsTableSeeder;
 use Database\Seeders\User\UserRolesTableSeeder;
 use Database\Seeders\User\UsersTableSeeder;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,6 +30,7 @@ class DatabaseSeeder extends Seeder
             UserRolesTableSeeder::class,
             BatchesTableSeeder::class,
             DepartmentsTableSeeder::class,
+            SettingsTableSeeder::class,
         ]);
     }
 }

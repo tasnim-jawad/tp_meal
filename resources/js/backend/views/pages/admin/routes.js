@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard.vue"
 
 import user_management from "../admin/management/user_management/setup/routes"
 import batch_management from "../admin/management/batch_management/setup/routes"
+import settings from "../admin/management/settings/setup/routes"
 
 
 const routes = {
@@ -17,6 +18,7 @@ const routes = {
         },
         user_management,
         batch_management,
+        settings,
 
     ]
 };
