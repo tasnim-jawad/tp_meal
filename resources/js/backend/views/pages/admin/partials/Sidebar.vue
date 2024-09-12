@@ -24,12 +24,21 @@
 
                 <ul class="side_nave_lists">
 
-                    <dropdown-nav :label="`User_management`" :icon="`fa-solid fa-users`">
+                    <dropdown-nav :label="`User Management`" :icon="`fa-solid fa-users`">
                         <dropdown-single-item
                             :to="{name:`Alluser`}"
                             :label="`all`"/>
                         <dropdown-single-item
                             :to="{name:`Createuser`}"
+                            :label="`create`"/>
+                    </dropdown-nav>
+
+                    <dropdown-nav :label="`Batch Management`" :icon="`fa-solid fa-users`">
+                        <dropdown-single-item
+                            :to="{name:`Allbatch`}"
+                            :label="`all`"/>
+                        <dropdown-single-item
+                            :to="{name:`Createbatch`}"
                             :label="`create`"/>
                     </dropdown-nav>
 

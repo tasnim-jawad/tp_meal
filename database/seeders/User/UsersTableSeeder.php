@@ -18,8 +18,8 @@ class UsersTableSeeder extends Seeder
         User::truncate();
         User::create([
             'user_role_serial' => 1,
-            'department_id' => 1,
-            'batch_id' => 1,
+            'department_id' => null,
+            'batch_id' => null,
             'name' => 'Super Admin',
             'email' => 'super_admin@gmail.com',
             'email_verified_at' => now(),
@@ -37,8 +37,8 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 2,
-            'department_id' => 2,
-            'batch_id' => 2,
+            'department_id' => null,
+            'batch_id' => null,
             'name' => 'admin',
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
@@ -56,8 +56,8 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 3,
-            'department_id' => 1,
-            'batch_id' => 3,
+            'department_id' => 3,
+            'batch_id' => 6,
             'name' => 'Michael Johnson',
             'email' => 'michaelj@example.com',
             'email_verified_at' => now(),
@@ -76,7 +76,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'user_role_serial' => 4,
             'department_id' => 2,
-            'batch_id' => 4,
+            'batch_id' => null,
             'name' => 'Emily Davis',
             'email' => 'emilyd@example.com',
             'email_verified_at' => now(),
@@ -94,7 +94,7 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 3,
-            'department_id' => 3,
+            'department_id' => 4,
             'batch_id' => 5,
             'name' => 'David Brown',
             'email' => 'davidb@example.com',
@@ -114,7 +114,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'user_role_serial' => 3,
             'department_id' => 4,
-            'batch_id' => 6,
+            'batch_id' => 4,
             'name' => 'Laura Wilson',
             'email' => 'lauraw@example.com',
             'email_verified_at' => now(),
@@ -133,7 +133,7 @@ class UsersTableSeeder extends Seeder
         User::create([
             'user_role_serial' => 3,
             'department_id' => 4,
-            'batch_id' => 7,
+            'batch_id' => 1,
             'name' => 'James Miller',
             'email' => 'jamesm@example.com',
             'email_verified_at' => now(),
@@ -151,8 +151,8 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 4,
-            'department_id' => 5,
-            'batch_id' => 8,
+            'department_id' => 1,
+            'batch_id' => null,
             'name' => 'Sara Taylor',
             'email' => 'sarat@example.com',
             'email_verified_at' => now(),
@@ -170,7 +170,7 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 3,
-            'department_id' => 6,
+            'department_id' => 3,
             'batch_id' => 9,
             'name' => 'Daniel Martinez',
             'email' => 'danielm@example.com',
@@ -189,8 +189,8 @@ class UsersTableSeeder extends Seeder
 
         User::create([
             'user_role_serial' => 3,
-            'department_id' => 6,
-            'batch_id' => 10,
+            'department_id' => 3,
+            'batch_id' => 7,
             'name' => 'Megan Clark',
             'email' => 'meganc@example.com',
             'email_verified_at' => now(),

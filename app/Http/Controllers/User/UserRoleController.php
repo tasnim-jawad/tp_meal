@@ -33,7 +33,6 @@ class UserRoleController extends Controller
                 return $q->where('id','LIKE' , '%' . $key . '%')
                     ->orWhere('serial','LIKE',  '%' . $key . '%')
                     ->orWhere('title','LIKE' , '%' . $key . '%');
-
             });
         }
 

@@ -16,14 +16,9 @@
                                             <select-all />
                                         </th>
                                         <th class="w-10"> ID </th>
-                                        <th> Image </th>
-                                        <th> Name </th>
-                                        <th> Mobile </th>
+                                        <th> Batch Title </th>
                                         <th> Department </th>
-                                        <th> Batch </th>
-                                        <th> Telegram </th>
-                                        <th> Gender </th>
-                                        <th> Email </th>
+                                        <th> Description </th>
                                     </tr>
                                 </thead>
                                 <tbody v-if="all?.data?.length">
@@ -39,28 +34,13 @@
                                             {{ item.id }}
                                         </td>
                                         <td>
-                                            <img :src="item.image" alt="" height="30">
-                                        </td>
-                                        <td>
-                                            {{ item.name }}
-                                        </td>
-                                        <td>
-                                            {{ item.mobile }}
+                                            {{ item.title }}
                                         </td>
                                         <td>
                                             {{ item.department?.title }}
                                         </td>
                                         <td>
-                                            {{ item.batch?.title }}
-                                        </td>
-                                        <td>
-                                            {{ item.telegram }}
-                                        </td>
-                                        <td>
-                                            {{ item.gender }}
-                                        </td>
-                                        <td>
-                                            {{ item.email }}
+                                            {{ item.description }}
                                         </td>
                                     </tr>
                                 </tbody>

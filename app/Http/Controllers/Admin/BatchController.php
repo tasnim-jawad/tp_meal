@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Admin\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class BatchController extends Controller
 {
     public function index(){
         // dd('index is called');
@@ -19,17 +19,15 @@ class UserController extends Controller
         $orderByType = request()->input('sort_type');
         $status = request()->input('status');
         $fields = request()->input('fields');
-        $with = ['user_role','department','batch'];
+        $with = ['department'];
         $condition = [];
-        $data = User::query();
+        $data = Batch::query();
 
         if (request()->has('search') && request()->input('search')) {
             $searchKey = request()->input('search');
             $data = $data->where(function ($q) use ($searchKey) {
-                $q->where('name','like', '%' . $searchKey . '%')
-                ->orWhere('mobile', 'like', '%' . $searchKey . '%')
-                ->orWhere('email', 'like', '%' . $searchKey . '%')
-                ->orWhere('gender', 'like', '%' . $searchKey . '%');
+                $q->where('title','like', '%' . $searchKey . '%')
+                ->orWhere('description', 'like', '%' . $searchKey . '%');
             });
         }
 
@@ -60,12 +58,12 @@ class UserController extends Controller
 
     public function show($slug)
     {
-        $with = [];
+        $with = ['department'];
         $select = ["*"];
         if (request()->has('select_all') && request()->select_all) {
             $select = "*";
         }
-        $data = User::where('slug', $slug)
+        $data = Batch::where('slug', $slug)
             ->select($select)
             ->with($with)
             ->first();
@@ -78,7 +76,7 @@ class UserController extends Controller
             return response()->json([
                 'err_message' => 'data not found',
                 'errors' => [
-                    'user' => [],
+                    'data' => [],
                 ],
             ], 404);
         }
@@ -87,33 +85,11 @@ class UserController extends Controller
     {
         // dd(request()->all(),auth()->user(),request()->password);
         $validator = Validator::make(request()->all(), [
-            'user_role_serial' => ['required'],
-            'department_id' => ['sometimes','required'],
-            'batch_id' => ['sometimes','required'],
-            'name' => ['required'],
-            'email' => [
-                'nullable',
-                'email',
-                Rule::unique('users', 'email'),
-            ],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max size
-            'gender' => ['required'],
-            'mobile' => [
-                'nullable',
-                Rule::unique('users', 'mobile'),
-            ],
-            'whatsapp' => ['nullable'],
-            'telegram' => ['nullable'],
-            'address' => ['required'],
-            'password' => ['required','confirmed','min:8'],
+            'department_id' => ['required'],
+            'title' => ['required'],
+            'description' => ['nullable'],
             'status' => ['required'],
-        ])->after(function ($validator) {
-            $data = request()->all();
-            if (empty($data['mobile']) && empty($data['email'])) {
-                $validator->errors()->add('mobile', 'Either mobile or email is required.');
-                $validator->errors()->add('email', 'Either mobile or email is required.');
-            }
-        });
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -123,26 +99,12 @@ class UserController extends Controller
         }
 
         $randomNumber = rand(1000, 9999);
-        $slug = Str::slug(request()->name) . '-' . $randomNumber;
+        $slug = Str::slug(request()->title) . '-' . $randomNumber;
 
-
-
-        $data = new User();
-        $data->user_role_serial = request()->user_role_serial;
-        $data->department_id = request()->department_id ?? null;
-        $data->batch_id = request()->batch_id ?? null;
-        $data->name = request()->name;
-        $data->email = request()->email ?? null;
-        if (request()->hasFile('image')) {
-            $image_file_path = upload_image(request()->image,request()->name , null);
-            $data->image = $image_file_path;
-        }
-        $data->gender = request()->gender;
-        $data->mobile = request()->mobile ?? null;
-        $data->whatsapp = request()->whatsapp ?? null;
-        $data->telegram = request()->telegram ?? null;
-        $data->address = request()->address ?? null;
-        $data->password = Hash::make(request()->password);
+        $data = new Batch();
+        $data->department_id = request()->department_id;
+        $data->title = request()->title;
+        $data->description = request()->description ?? null;
 
         $data->slug = $slug;
         $data->creator = auth()->id();
@@ -156,7 +118,7 @@ class UserController extends Controller
     {
         // dd($data, request()->all());
         // dd(request()->all(),$slug);
-        $data = User::where('slug', $slug)->first();
+        $data = Batch::where('slug', $slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -165,33 +127,11 @@ class UserController extends Controller
         }
         // dd($data, request()->all());
         $validator = Validator::make(request()->all(), [
-            'user_role_serial' => ['required'],
-            'department_id' => ['sometimes','required'],
-            'batch_id' => ['sometimes','required'],
-            'name' => ['required'],
-            'email' => [
-                'nullable',
-                'email',
-                Rule::unique('users', 'email')->ignore($data->id),
-            ],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max size
-            'gender' => ['required'],
-            'mobile' => [
-                'nullable',
-                Rule::unique('users', 'mobile')->ignore($data->id),
-            ],
-            'whatsapp' => ['nullable'],
-            'telegram' => ['nullable'],
-            'address' => ['required'],
-            'password' => ['nullable','confirmed','min:8'],
+            'department_id' => ['required'],
+            'title' => ['required'],
+            'description' => ['nullable'],
             'status' => ['required'],
-        ])->after(function ($validator) {
-            $data = request()->all();
-            if (empty($data['mobile']) && empty($data['email'])) {
-                $validator->errors()->add('mobile', 'Either mobile or email is required.');
-                $validator->errors()->add('email', 'Either mobile or email is required.');
-            }
-        });
+        ]);
 
         if ($validator->fails()) {
             return response()->json([
@@ -200,24 +140,10 @@ class UserController extends Controller
             ], 422);
         }
 
-        $data->user_role_serial = request()->user_role_serial;
-        $data->department_id = request()->department_id ?? null;
-        $data->batch_id = request()->batch_id ?? null;
-        $data->name = request()->name;
-        $data->email = request()->email ?? null;
-        if (request()->hasFile('image')) {
-            $image_file_path = upload_image(request()->image, request()->name , $data->image );
-            $data->image = $image_file_path;
-        }
-        $data->gender = request()->gender;
-        $data->mobile = request()->mobile ?? null;
-        $data->whatsapp = request()->whatsapp ?? null;
-        $data->telegram = request()->telegram ?? null;
-        $data->address = request()->address ?? null;
-        if (request()->password != '') {
-            $data->password = Hash::make(request()->password);
-        }
-        $data->slug = $slug;
+        $data->department_id = request()->department_id;
+        $data->title = request()->title;
+        $data->description = request()->description ?? null;
+
         $data->creator = auth()->id();
         $data->status = request()->status ?? 'active';
         $data->update();
@@ -232,7 +158,7 @@ class UserController extends Controller
     public function soft_delete()
     {
         $validator = Validator::make(request()->all(), [
-            'slug' => ['required', 'exists:users,slug'],
+            'slug' => ['required', 'exists:batches,slug'],
         ]);
 
         if ($validator->fails()) {
@@ -242,7 +168,7 @@ class UserController extends Controller
             ], 422);
         }
 
-        $data = User::where('slug',request()->slug)->first();
+        $data = Batch::where('slug',request()->slug)->first();
         $data->status = "inactive";
         $data->save();
 
@@ -254,7 +180,7 @@ class UserController extends Controller
 
     public function destroy()
     {
-        $data = User::where('slug',request()->slug)->first();
+        $data = Batch::where('slug',request()->slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -272,7 +198,7 @@ class UserController extends Controller
     public function restore()
     {
         $validator = Validator::make(request()->all(), [
-            'slug' => ['required', 'exists:users,slug'],
+            'slug' => ['required', 'exists:batches,slug'],
         ]);
 
         if ($validator->fails()) {
@@ -282,7 +208,7 @@ class UserController extends Controller
             ], 422);
         }
 
-        $data = User::find(request()->id);
+        $data = Batch::find(request()->id);
         $data->status = 'active';
         $data->save();
 
