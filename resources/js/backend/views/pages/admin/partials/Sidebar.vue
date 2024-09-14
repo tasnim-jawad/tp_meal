@@ -50,6 +50,23 @@
                             :to="{name:`Createsetting`}"
                             :label="`create`"/>
                     </dropdown-nav>
+                    <dropdown-nav :label="`Holiday Management`" :icon="`fa-solid fa-users`">
+                        <dropdown-single-item
+                            :to="{name:`Allholiday`}"
+                            :label="`all`"/>
+                        <dropdown-single-item
+                            :to="{name:`Createholiday`}"
+                            :label="`create`"/>
+                    </dropdown-nav>
+
+                    <dropdown-nav :label="`Daily Bajar`" :icon="`fa-solid fa-users`">
+                        <dropdown-single-item
+                            :to="{name:`Alldaily_bajar`}"
+                            :label="`all`"/>
+                        <dropdown-single-item
+                            :to="{name:`Createdaily_bajar`}"
+                            :label="`create`"/>
+                    </dropdown-nav>
 
                 </ul>
 

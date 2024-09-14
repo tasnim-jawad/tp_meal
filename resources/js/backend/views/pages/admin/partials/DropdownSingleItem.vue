@@ -18,8 +18,8 @@ export default {
     },
     computed: {
         isActive:function() {
-            console.log("path",this.$route.path);
-            console.log('to',this.to);
+            // console.log("path",this.$route.path);
+            // console.log('to',this.to);
             return this.$route.path === this.to;
         }
     }

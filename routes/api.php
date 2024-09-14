@@ -53,6 +53,30 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function(){
         Route::get('{slug}', [App\Http\Controllers\Admin\SettingController::class,'show']);
     });
 
+    Route::group(['prefix' => 'holidays'], function(){
+        Route::get('', [App\Http\Controllers\Admin\HolidayController::class,'index']);
+        Route::post('store', [App\Http\Controllers\Admin\HolidayController::class,'store']);
+        Route::post('update/{id}', [App\Http\Controllers\Admin\HolidayController::class,'update']);
+        Route::post('soft-delete', [App\Http\Controllers\Admin\HolidayController::class,'soft_delete']);
+        Route::delete('destroy/{slug}', [App\Http\Controllers\Admin\HolidayController::class,'destroy']);
+        Route::post('restore', [App\Http\Controllers\Admin\HolidayController::class,'restore']);
+        Route::post('import', [App\Http\Controllers\Admin\HolidayController::class,'import']);
+        Route::post('bulk-action', [App\Http\Controllers\Admin\HolidayController::class, 'bulkAction']);
+        Route::get('{slug}', [App\Http\Controllers\Admin\HolidayController::class,'show']);
+    });
+
+    Route::group(['prefix' => 'daily-bajars'], function(){
+        Route::get('', [App\Http\Controllers\Admin\HolidayController::class,'index']);
+        Route::post('store', [App\Http\Controllers\Admin\HolidayController::class,'store']);
+        Route::post('update/{id}', [App\Http\Controllers\Admin\HolidayController::class,'update']);
+        Route::post('soft-delete', [App\Http\Controllers\Admin\HolidayController::class,'soft_delete']);
+        Route::delete('destroy/{slug}', [App\Http\Controllers\Admin\HolidayController::class,'destroy']);
+        Route::post('restore', [App\Http\Controllers\Admin\HolidayController::class,'restore']);
+        Route::post('import', [App\Http\Controllers\Admin\HolidayController::class,'import']);
+        Route::post('bulk-action', [App\Http\Controllers\Admin\HolidayController::class, 'bulkAction']);
+        Route::get('{slug}', [App\Http\Controllers\Admin\HolidayController::class,'show']);
+    });
+
 });
 
 

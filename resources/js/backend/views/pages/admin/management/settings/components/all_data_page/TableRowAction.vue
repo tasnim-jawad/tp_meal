@@ -8,12 +8,12 @@
             <li>
                 <edit :item="item"/>
             </li>
-            <li>
+            <!-- <li>
                 <deactive :item="item"/>
-            </li>
-            <li>
+            </li> -->
+            <!-- <li>
                 <destroy :item="item"/>
-            </li>
+            </li> -->
 
             <slot />
         </ul>

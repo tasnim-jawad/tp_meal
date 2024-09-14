@@ -1,0 +1,5 @@
+php artisan make:model Admin/Account/DailyBajar -m
+php artisan make:controller Admin/Account/DailyBajarController
+php artisan make:seeder Admin/Account/DailyBajarsTableSeeder
+
+daily_bajar folder copy in vue

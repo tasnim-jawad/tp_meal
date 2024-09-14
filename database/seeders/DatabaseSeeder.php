@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Database\Seeders\Admin\Account\DailyBajarsTableSeeder;
 use Database\Seeders\Admin\BatchesTableSeeder;
 use Database\Seeders\Admin\DepartmentsTableSeeder;
+use Database\Seeders\Admin\HolidaysTableSeeder;
 use Database\Seeders\Admin\SettingsTableSeeder;
 use Database\Seeders\User\UserRolesTableSeeder;
 use Database\Seeders\User\UsersTableSeeder;
@@ -31,6 +33,8 @@ class DatabaseSeeder extends Seeder
             BatchesTableSeeder::class,
             DepartmentsTableSeeder::class,
             SettingsTableSeeder::class,
+            HolidaysTableSeeder::class,
+            DailyBajarsTableSeeder::class,
         ]);
     }
 }
