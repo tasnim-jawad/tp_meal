@@ -7,6 +7,7 @@ import Details from "../Details.vue";
 import Edit from "../Edit.vue";
 import EditForm from "../EditForm.vue";
 import BajarDateWise from "../BajarDateWise.vue";
+import BajarSingleDay from "../BajarSingleDay.vue";
 import Layout from "../Layout.vue";
 
 let route_prefix = setup.route_prefix;
@@ -51,6 +52,11 @@ const routes =
             path: "bajar-date-wise",
             name: "BajarDateWise" + route_prefix,
             component: BajarDateWise,
+        },
+        {
+            path: "bajar-single-day/:date",
+            name: "BajarSingleDay" + route_prefix,
+            component: BajarSingleDay,
         },
 
     ]

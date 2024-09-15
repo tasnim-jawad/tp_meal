@@ -67,7 +67,7 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function(){
 
     Route::group(['prefix' => 'daily-bajars'], function(){
         Route::get('date-wise-bajar', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'date_wise_bajar']);
-
+        Route::get('bajar-single-day', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'bajar_single_day']);
 
         Route::post('store', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'store']);
         Route::post('update/{id}', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'update']);

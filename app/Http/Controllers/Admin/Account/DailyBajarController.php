@@ -79,6 +79,41 @@ class DailyBajarController extends Controller
             $year =$now->year;
         }
 
+        $data = DailyBajar::select(DB::raw('DATE(date) as date'), DB::raw('SUM(total) as daily_total'))
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->groupBy(DB::raw('DATE(date)'))
+            ->orderBy(DB::raw('DATE(date)'), 'desc')
+            ->get();
+
+        $monthly_total = DailyBajar::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->sum('total');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data,
+            'monthly_total' => $monthly_total
+        ]);
+    }
+    public function bajar_single_day(){
+        // dd('index is called');
+        // dd(request()->all());
+        $month = '';
+        $year = '';
+
+        if (request()->input('month') != null) {
+            $search_month = request()->input('month');
+            $carbonDate = Carbon::parse($search_month);
+            $month = $carbonDate->month;
+            $year = $carbonDate->year;
+
+        }else{
+            $now =Carbon::now();
+            $month =$now->month;
+            $year =$now->year;
+        }
+
         // $data = DailyBajar::whereMonth('date',$month)->whereYear('date',$year);
 
         // if (request()->has('search') && request()->input('search')) {

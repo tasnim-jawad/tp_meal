@@ -3,12 +3,12 @@
         <div class="col-sm-12">
             <div class="card w-100">
                 <div class="card-header py-1 d-flex align-items-center justify-content-between gap-2">
-                    <form action="" id="month_form">
+                    <!-- <form action="" id="month_form">
                         <div class="d-flex align-items-center gap-2">
                             <label class="session_label" for="month">Month</label>
                             <input type="month" name="month" id="month" class="rounded px-2" @change.prevent="month_submit"/>
                         </div>
-                    </form>
+                    </form> -->
                     <h2 class="pages_title">{{ setup.create_page_title }}</h2>
                     <router-link :to="{ name: `CreateForm${setup.route_prefix}` }" class="btn btn-outline-warning btn-sm">Create new Bajar </router-link>
                 </div>
@@ -27,7 +27,7 @@
                                 <tr v-for="(item, index) in data" :key="index">
                                     <td>
                                         <div class="action_btn d-flex gap-2 p-2">
-                                            <router-link :to="{ name: `BajarSingleDay${setup.route_prefix}`, params: { date: item.date  } }" class="btn btn-outline-warning btn-sm">
+                                            <router-link :to="{ name: 'Alldaily_bajar', params: { id: index } }" class="btn btn-outline-warning btn-sm">
                                                 <i class="fa-solid fa-info"></i>
                                             </router-link>
 
