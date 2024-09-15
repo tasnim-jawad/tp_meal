@@ -6,6 +6,7 @@ import CreateForm from "../CreateForm.vue";
 import Details from "../Details.vue";
 import Edit from "../Edit.vue";
 import EditForm from "../EditForm.vue";
+import BajarDateWise from "../BajarDateWise.vue";
 import Layout from "../Layout.vue";
 
 let route_prefix = setup.route_prefix;
@@ -45,6 +46,11 @@ const routes =
             name: "EditForm" + route_prefix,
             component: EditForm,
             props: true,
+        },
+        {
+            path: "bajar-date-wise",
+            name: "BajarDateWise" + route_prefix,
+            component: BajarDateWise,
         },
 
     ]

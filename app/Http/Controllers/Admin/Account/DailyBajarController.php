@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin\Account;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Account\DailyBajar;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -56,6 +58,57 @@ class DailyBajarController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $data
+        ]);
+    }
+
+    public function date_wise_bajar(){
+        // dd('index is called');
+        // dd(request()->all());
+        $month = '';
+        $year = '';
+
+        if (request()->input('month') != null) {
+            $search_month = request()->input('month');
+            $carbonDate = Carbon::parse($search_month);
+            $month = $carbonDate->month;
+            $year = $carbonDate->year;
+
+        }else{
+            $now =Carbon::now();
+            $month =$now->month;
+            $year =$now->year;
+        }
+
+        // $data = DailyBajar::whereMonth('date',$month)->whereYear('date',$year);
+
+        // if (request()->has('search') && request()->input('search')) {
+        //     $searchKey = request()->input('search');
+        //     $data = $data->where(function ($q) use ($searchKey) {
+        //         $q->where('date','like', '%' . $searchKey . '%')
+        //         ->orWhere('title', 'like', '%' . $searchKey . '%')
+        //         ->orWhere('total', 'like', '%' . $searchKey . '%')
+        //         ->orWhere('price', 'like', '%' . $searchKey . '%')
+        //         ->orWhere('comment', 'like', '%' . $searchKey . '%')
+        //         ->orWhere('qty', 'like', '%' . $searchKey . '%')
+        //         ->orWhere('unit', 'like', '%' . $searchKey . '%');
+        //     });
+        // }
+
+        $data = DailyBajar::select(DB::raw('DATE(date) as date'), DB::raw('SUM(total) as daily_total'))
+            ->whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->groupBy(DB::raw('DATE(date)'))
+            ->orderBy(DB::raw('DATE(date)'), 'desc')
+            ->get();
+
+        $monthly_total = DailyBajar::whereYear('date', $year)
+            ->whereMonth('date', $month)
+            ->sum('total');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data,
+            'monthly_total' => $monthly_total
         ]);
     }
 
@@ -222,6 +275,39 @@ class DailyBajarController extends Controller
         return response()->json([
             'result' => 'activated',
         ], 200);
+    }
+
+    public function import(){
+        $data = request()->input('data');
+        // dd(request()->all()['data']['data'],$data['data'] ,$data['date'] );
+
+        $date = $data['date'];
+        $all_data = $data['data'];
+
+        $randomNumber_group = rand(1000, 9999);
+        $randomNumber_slug = rand(1000, 9999);
+        // $slug = Str::slug(request()->title) . '-' . $randomNumber;
+
+        foreach ($all_data as $row) {
+            DailyBajar::create([
+                "group_id" => $randomNumber_group,
+                "title" => $row['title'],
+                "qty" => $row['qty'],
+                "unit" => $row['unit'],
+                "price" => $row['price'],
+                "total" => $row['total'],
+                "comment" => $row['comment'],
+                "date" => $date,
+                "slug" => Str::slug($row['title']). '_' . $randomNumber_slug,
+                "creator" => auth()->id(),
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'result' => 'Items imported successfully',
+        ], 200);
+
     }
 
 }

@@ -60,11 +60,14 @@
                     </dropdown-nav>
 
                     <dropdown-nav :label="`Daily Bajar`" :icon="`fa-solid fa-users`">
-                        <dropdown-single-item
+                        <!-- <dropdown-single-item
                             :to="{name:`Alldaily_bajar`}"
-                            :label="`all`"/>
+                            :label="`all`"/> -->
                         <dropdown-single-item
-                            :to="{name:`Createdaily_bajar`}"
+                            :to="{name:`BajarDateWisedaily_bajar`}"
+                            :label="`date wise`"/>
+                        <dropdown-single-item
+                            :to="{name:`CreateFormdaily_bajar`}"
                             :label="`create`"/>
                     </dropdown-nav>
 

@@ -2,7 +2,7 @@
     <div class="vue_main_container pb-5 mt-3">
         <div class="table_topbar">
             <h2 class="pages_title">{{ setup.create_page_title }}</h2>
-            <router-link :to="{ name: `Create${setup.route_prefix}` }"  class="btn btn-outline-warning btn-sm">Go Back</router-link>
+            <router-link :to="{ name: `BajarDateWise${setup.route_prefix}` }"  class="btn btn-outline-warning btn-sm">Go Back</router-link>
         </div>
         <form class="form_border">
             <div class="mb-3 form-group">
@@ -56,10 +56,10 @@
                                     <input type="number" class="form-control" name="price" v-model="row.price" :class="{ error: errors[index] && errors[index].price }">
                                 </td>
                                 <td>
-                                    <input type="number" class="form-control" name="total" :value="row.qty * row.price" >
+                                    <input type="number" class="form-control" name="total"  v-model="row.total">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="comment" >
+                                    <input type="text" class="form-control" name="comment" v-model="row.comment">
                                 </td>
                             </tr>
                             <tr v-if="row_data.length > 1">
@@ -119,24 +119,24 @@ export default {
     methods:{
         ...mapActions(data_store, {
             submit_form_store: 'submit_create_form',
-            import: 'submit_create_form',
+            import: 'import',
         }),
-        submit_form:async function(event){
-            // console.log("submitted");
-            let formData = new FormData(event.target);
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
+        // submit_form:async function(event){
+        //     // console.log("submitted");
+        //     let formData = new FormData(event.target);
+        //     for (let [key, value] of formData.entries()) {
+        //         console.log(`${key}: ${value}`);
+        //     }
 
-            console.log(this.row_data);
+        //     console.log(this.row_data);
 
-            await this.submit_form_store({
-                form_data:formData,
-                department:this.selectedDepartments,
-            })
-            event.target.reset();
-            // this.$router.push(`/bivagio-barshik-porikolpona/create`);
-        },
+        //     await this.submit_form_store({
+        //         form_data:formData,
+        //         department:this.selectedDepartments,
+        //     })
+        //     event.target.reset();
+        //     // this.$router.push(`/bivagio-barshik-porikolpona/create`);
+        // },
 
         add_row:function(){
             this.row_data.push({...this.row_data_object})
@@ -146,7 +146,7 @@ export default {
         },
 
         validate_data: function() {
-            this.errors = []; // Clear previous errors
+            this.errors = [];
             let valid = true;
 
             this.row_data.forEach((row, index) => {
@@ -176,6 +176,19 @@ export default {
 
                 this.errors[index] = rowErrors;
 
+
+                //------ date error handaling ------\\
+                let date_input = document.getElementById("date");
+                if(!date_input.value){
+                    date_input.classList.add("error");
+                    valid = false;
+                }else{
+                    if (date_input.classList.contains("error")) {
+                        date_input.classList.remove("error");
+                    }
+                }
+                //------ date error handaling ------\\
+
             });
             console.log(this.errors);
 
@@ -183,16 +196,30 @@ export default {
                 this.submitData();
             }
         },
-        submitData() {
-            // Code to send data to backend if validation passes
-            console.log('Data is valid and ready to be submitted');
+        submitData: async function() {
+            let date = document.getElementById("date").value;
+
+            let responce = await this.import({
+                'date': date,
+                'data': this.row_data,
+            })
+            if(responce.data.status == 'success'){
+                this.$router.push({ name: `BajarDateWise${this.setup.route_prefix}` });
+            }
         }
 
     },
     watch: {
         row_data: {
             handler() {
+                this.all_total = 0;
+
+                this.row_data.forEach((row) => {
+                    row.total = row.qty * row.price;
+                });
+
                 this.all_total = this.row_data.reduce((sum, row) => sum + (row.qty * row.price || 0), 0);
+
             },
             deep: true  // This enables deep watching
         }

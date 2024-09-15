@@ -25,12 +25,9 @@
                                 <tr class="">
                                     <th>action</th>
                                     <th>si</th>
-                                    <th>দফা</th>
-                                    <th>অর্জিতব্য টার্গেট</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
                                     <th>কর্ম পরিকল্পনা</th>
-                                    <th>ছক</th>
-                                    <th>বাস্তবায়নকারী বিভাগ</th>
-                                    <th>পরিকল্পনার অবাস্তবায়িত অংশ</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,7 +86,7 @@ export default {
   data: () => ({}),
   computed: {
     ...mapState(data_store, {
-      data: "createdData",
+      data: "data",
       setup: "setup",
     }),
   },
