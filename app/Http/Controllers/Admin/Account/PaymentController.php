@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin\Account;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin\Account\DailyBajar;
-use Carbon\Carbon;
+use App\Models\Admin\Account\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class DailyBajarController extends Controller
+class PaymentController extends Controller
 {
     public function index(){
         // dd('index is called');
@@ -19,20 +17,21 @@ class DailyBajarController extends Controller
         $orderByType = request()->input('sort_type');
         $status = request()->input('status');
         $fields = request()->input('fields');
-        $with = [];
+        $with = ['user'];
         $condition = [];
-        $data = DailyBajar::query();
+        $data = Payment::query();
 
         if (request()->has('search') && request()->input('search')) {
             $searchKey = request()->input('search');
             $data = $data->where(function ($q) use ($searchKey) {
-                $q->where('date','like', '%' . $searchKey . '%')
-                ->orWhere('title', 'like', '%' . $searchKey . '%')
-                ->orWhere('total', 'like', '%' . $searchKey . '%')
-                ->orWhere('price', 'like', '%' . $searchKey . '%')
-                ->orWhere('comment', 'like', '%' . $searchKey . '%')
-                ->orWhere('qty', 'like', '%' . $searchKey . '%')
-                ->orWhere('unit', 'like', '%' . $searchKey . '%');
+                $q->whereHas('user', function ($query) use ($searchKey) {
+                    $query->where('mobile', 'like', '%' . $searchKey . '%');
+                })
+                ->orWhereHas('user', function ($query) use ($searchKey) {
+                    $query->where('name', 'like', '%' . $searchKey . '%');
+                })
+                ->orWhere('date', 'like', '%' . $searchKey . '%')
+                ->orWhere('amount', 'like', '%' . $searchKey . '%');
             });
         }
 
@@ -61,54 +60,6 @@ class DailyBajarController extends Controller
         ]);
     }
 
-    public function date_wise_bajar(){
-        // dd('index is called');
-        // dd(request()->all());
-        $month = '';
-        $year = '';
-
-        if (request()->input('month') != null) {
-            $search_month = request()->input('month');
-            $carbonDate = Carbon::parse($search_month);
-            $month = $carbonDate->month;
-            $year = $carbonDate->year;
-
-        }else{
-            $now =Carbon::now();
-            $month =$now->month;
-            $year =$now->year;
-        }
-
-        $data = DailyBajar::select(DB::raw('DATE(date) as date'), DB::raw('SUM(total) as daily_total'))
-            ->whereYear('date', $year)
-            ->whereMonth('date', $month)
-            ->groupBy(DB::raw('DATE(date)'))
-            ->orderBy(DB::raw('DATE(date)'), 'desc')
-            ->get();
-
-        $monthly_total = DailyBajar::whereYear('date', $year)
-            ->whereMonth('date', $month)
-            ->sum('total');
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-            'monthly_total' => $monthly_total
-        ]);
-    }
-    public function bajar_single_day(){
-
-        $date = request()->input('date');
-        $data = DailyBajar::where('date', $date)->get();
-        $daily_total = DailyBajar::where('date', $date)->sum('total');
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $data,
-            'daily_total' => $daily_total
-        ]);
-    }
-
     public function show($slug)
     {
         $with = [];
@@ -116,7 +67,7 @@ class DailyBajarController extends Controller
         if (request()->has('select_all') && request()->select_all) {
             $select = "*";
         }
-        $data = DailyBajar::where('slug', $slug)
+        $data = Payment::where('slug', $slug)
             ->select($select)
             ->with($with)
             ->first();
@@ -138,14 +89,10 @@ class DailyBajarController extends Controller
     {
         // dd(request()->all(),auth()->user(),request()->password);
         $validator = Validator::make(request()->all(), [
-            'title' => ['required'],
-            'qty' => ['required'],
-            'unit' => ['required'],
-            'price' => ['required'],
-            'total' => ['required'],
             'date' => ['required'],
-            'comment' => ['nullable'],
-            'status' => ['nullable'],
+            'title' => ['required'],
+            'description' => ['nullable'],
+            'status' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -158,7 +105,7 @@ class DailyBajarController extends Controller
         $randomNumber = rand(1000, 9999);
         $slug = Str::slug(request()->title) . '-' . $randomNumber;
 
-        $data = new DailyBajar();
+        $data = new Payment();
         $data->date = request()->date;
         $data->title = request()->title;
         $data->description = request()->description ?? null;
@@ -173,22 +120,21 @@ class DailyBajarController extends Controller
 
     public function update($slug)
     {
-        $data = DailyBajar::where('slug', $slug)->first();
+        // dd($data, request()->all());
+        // dd(request()->all(),$slug);
+        $data = Payment::where('slug', $slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
                 'errors' => ['name' => ['data not found by given id ' . (request()->id ? request()->id : 'null')]],
             ], 422);
         }
-
+        // dd($data, request()->all());
         $validator = Validator::make(request()->all(), [
-            'title' => ['required'],
-            'qty' => ['required'],
-            'unit' => ['required'],
-            'price' => ['required'],
-            'total' => ['required'],
             'date' => ['required'],
-            'comment' => ['nullable'],
+            'title' => ['required'],
+            'description' => ['nullable'],
+            'status' => ['required'],
         ]);
 
         if ($validator->fails()) {
@@ -198,12 +144,9 @@ class DailyBajarController extends Controller
             ], 422);
         }
 
-        $data->title = request()->title;
-        $data->qty = request()->qty;
-        $data->unit = request()->unit;
-        $data->price = request()->price;
-        $data->total = request()->total;
         $data->date = request()->date;
+        $data->title = request()->title;
+        $data->description = request()->description ?? null;
 
         $data->creator = auth()->id();
         $data->status = request()->status ?? 'active';
@@ -229,7 +172,7 @@ class DailyBajarController extends Controller
             ], 422);
         }
 
-        $data = DailyBajar::where('slug',request()->slug)->first();
+        $data = Payment::where('slug',request()->slug)->first();
         $data->status = "inactive";
         $data->save();
 
@@ -241,7 +184,7 @@ class DailyBajarController extends Controller
 
     public function destroy()
     {
-        $data = DailyBajar::where('slug',request()->slug)->first();
+        $data = Payment::where('slug',request()->slug)->first();
         if (!$data) {
             return response()->json([
                 'err_message' => 'validation error',
@@ -269,46 +212,13 @@ class DailyBajarController extends Controller
             ], 422);
         }
 
-        $data = DailyBajar::find(request()->id);
+        $data = Payment::find(request()->id);
         $data->status = 'active';
         $data->save();
 
         return response()->json([
             'result' => 'activated',
         ], 200);
-    }
-
-    public function import(){
-        $data = request()->input('data');
-        // dd(request()->all()['data']['data'],$data['data'] ,$data['date'] );
-
-        $date = $data['date'];
-        $all_data = $data['data'];
-
-        $randomNumber_group = rand(1000, 9999);
-        $randomNumber_slug = rand(1000, 9999);
-        // $slug = Str::slug(request()->title) . '-' . $randomNumber;
-
-        foreach ($all_data as $row) {
-            DailyBajar::create([
-                "group_id" => $randomNumber_group,
-                "title" => $row['title'],
-                "qty" => $row['qty'],
-                "unit" => $row['unit'],
-                "price" => $row['price'],
-                "total" => $row['total'],
-                "comment" => $row['comment'],
-                "date" => $date,
-                "slug" => Str::slug($row['title']). '_' . $randomNumber_slug,
-                "creator" => auth()->id(),
-            ]);
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'result' => 'Items imported successfully',
-        ], 200);
-
     }
 
 }

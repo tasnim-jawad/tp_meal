@@ -4,12 +4,9 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="text-capitalize">Details {{ setup.route_prefix }}</h5>
                     <div>
-                        <router-link class="btn btn-outline-warning btn-sm me-2" :to="{ name: `BajarDateWisedaily_bajar` }">
-                            Date Wise Bajar
+                        <router-link class="btn btn-outline-warning btn-sm" :to="{ name: `All${setup.route_prefix}` }">
+                            All {{ setup.route_prefix }}
                         </router-link>
-                        <a class="btn btn-outline-warning btn-sm" @click="goBack">
-                            Go Back
-                        </a>
                     </div>
                 </div>
                 <div class="card-body card_body_fixed_height">
@@ -22,7 +19,7 @@
                                             <img :src="item.image" alt="">
                                         </th>
                                     </tr> -->
-                                    <tr>
+                                    <tr class="border-bottom">
                                         <th>Title</th>
                                         <th>:</th>
                                         <th>
@@ -30,46 +27,25 @@
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th>Title</th>
-                                        <th>:</th>
-                                        <th>
+                                        <td>Date</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.date }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Title</td>
+                                        <td>:</td>
+                                        <td>
                                             {{ item.title }}
-                                        </th>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <th>QTY</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.qty }}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>Unit</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.unit }}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>Price</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.price }}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>Total</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.total }}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>Comment</th>
-                                        <th>:</th>
-                                        <th>
-                                            {{ item.comment }}
-                                        </th>
+                                        <td>Description</td>
+                                        <td>:</td>
+                                        <td>
+                                            {{ item.description }}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -142,9 +118,6 @@ export default {
         get_data: async function(slug){
             this.item = {};
             await this.details(slug)
-        },
-        goBack() {
-            this.$router.go(-1)
         },
     },
     computed: {

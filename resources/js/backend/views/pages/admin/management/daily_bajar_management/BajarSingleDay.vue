@@ -9,6 +9,9 @@
                             <input type="month" name="month" id="month" class="rounded px-2" @change.prevent="month_submit"/>
                         </div>
                     </form> -->
+                    <div class="date_container">
+                        <span>Date: </span> <span>{{ param_date }}</span>
+                    </div>
                     <h2 class="pages_title">{{ setup.create_page_title }}</h2>
                     <router-link :to="{ name: `CreateForm${setup.route_prefix}` }" class="btn btn-outline-warning btn-sm">Create new Bajar </router-link>
                 </div>
@@ -19,32 +22,53 @@
                                 <tr class="">
                                     <th>action</th>
                                     <th>#srl</th>
-                                    <th class="width_40">Date</th>
-                                    <th class="width_40">Total</th>
+                                    <th>Title</th>
+                                    <th>QTY</th>
+                                    <th>Unit</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Comment</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in data" :key="index">
                                     <td>
-                                        <div class="action_btn d-flex gap-2 p-2">
+                                        <!-- <div class="action_btn d-flex gap-2 p-2">
                                             <router-link :to="{ name: 'Alldaily_bajar', params: { id: index } }" class="btn btn-outline-warning btn-sm">
                                                 <i class="fa-solid fa-info"></i>
                                             </router-link>
 
-                                        </div>
+                                        </div> -->
+
+                                        <table-row-action :item="item"></table-row-action>
+
+
                                     </td>
                                     <td>{{ index + 1 }}</td>
                                     <td>
-                                        {{ item.date }}
+                                        {{ item.title }}
                                     </td>
                                     <td>
-                                        {{ item.daily_total }}  /-
+                                        {{ item.qty }}
+                                    </td>
+                                    <td>
+                                        {{ item.unit }}
+                                    </td>
+                                    <td>
+                                        {{ item.price }}
+                                    </td>
+                                    <td>
+                                        {{ item.total }} /-
+                                    </td>
+                                    <td>
+                                        {{ item.comment }}
                                     </td>
 
                                 </tr>
-                                <tr v-if="monthly_total > 0">
-                                    <td class="text-end pe-3" colspan="3">total</td>
-                                    <td class="text-danger fw-bold">{{ monthly_total }} /-</td>
+                                <tr v-if="daily_total > 0">
+                                    <td class="text-end pe-3" colspan="6">total</td>
+                                    <td class="text-danger fw-bold">{{ daily_total }} /-</td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -63,62 +87,39 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { store as data_store } from "./custom_store/store";
+import TableRowAction from './components/all_data_page/TableRowAction.vue';
 export default {
+    components: { TableRowAction },
+
     data: () => ({
+        param_date:null,
         data:null,
-        monthly_total:0,
+        daily_total: 0,
     }),
     computed: {
         ...mapState(data_store, {
-        data: "data",
         setup: "setup",
         }),
     },
     created:async function(){
-        let data = await this.date_wise_bajar();
+        this.param_date = this.$route.params.date;
+
+        let data = await this.single_day_bajar({
+            'date': this.param_date,
+        });
+
         if(data.data.status == "success"){
             this.data = data.data.data
-            this.monthly_total = data.data.monthly_total
+            this.daily_total = data.data.daily_total
         }else{
             this.data = []
         }
-        console.log("final " , this.data);
-
-
     },
     methods: {
         ...mapActions(data_store, {
-            date_wise_bajar: "date_wise_bajar",
+            single_day_bajar: "single_day_bajar",
         }),
 
-        month_submit: async function () {
-            let month = document.getElementById("month").value;
-
-            let data = await this.date_wise_bajar({
-                'month': month
-            });
-
-            if(data.data.status == "success"){
-                this.data = data.data.data
-                this.monthly_total = data.data.monthly_total
-            }else{
-                this.data = []
-            }
-        },
-
-        submit_all: function (index) {
-            this.delete_store_data({
-                index: index,
-            });
-        },
-        import_data: function () {
-            const session_form = document.getElementById("session_form");
-            let formData = new FormData(session_form);
-            // for (let [key, value] of formData.entries()) {
-            //     console.log(`${key}: ${value}`);
-            // }
-
-        },
     },
 };
 </script>

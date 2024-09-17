@@ -25,11 +25,11 @@ export default [
         type: "password",
         value: "",
     },
-    {
-        name: "password_confirmation",
-        label: "Password Confirmation",
-        type: "password",
-        value: "",
-    },
+    // {
+    //     name: "password_confirmation",
+    //     label: "Password Confirmation",
+    //     type: "password",
+    //     value: "",
+    // },
 
 ];

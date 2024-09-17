@@ -26,11 +26,10 @@
                             <tbody>
                                 <tr v-for="(item, index) in data" :key="index">
                                     <td>
-                                        <div class="action_btn d-flex gap-2 p-2">
+                                        <div class="action_btn d-flex gap-2 p-2 justify-content-center">
                                             <router-link :to="{ name: `BajarSingleDay${setup.route_prefix}`, params: { date: item.date  } }" class="btn btn-outline-warning btn-sm">
                                                 <i class="fa-solid fa-info"></i>
                                             </router-link>
-
                                         </div>
                                     </td>
                                     <td>{{ index + 1 }}</td>
@@ -40,7 +39,6 @@
                                     <td>
                                         {{ item.daily_total }}  /-
                                     </td>
-
                                 </tr>
                                 <tr v-if="monthly_total > 0">
                                     <td class="text-end pe-3" colspan="3">total</td>
@@ -82,6 +80,7 @@ export default {
         }else{
             this.data = []
         }
+
         console.log("final " , this.data);
 
 

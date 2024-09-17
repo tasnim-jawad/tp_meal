@@ -69,6 +69,7 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function(){
         Route::get('date-wise-bajar', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'date_wise_bajar']);
         Route::get('bajar-single-day', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'bajar_single_day']);
 
+        Route::get('', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'index']);
         Route::post('store', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'store']);
         Route::post('update/{id}', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'update']);
         Route::post('soft-delete', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'soft_delete']);
@@ -77,6 +78,18 @@ Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function(){
         Route::post('import', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'import']);
         Route::post('bulk-action', [App\Http\Controllers\Admin\Account\DailyBajarController::class, 'bulkAction']);
         Route::get('{slug}', [App\Http\Controllers\Admin\Account\DailyBajarController::class,'show']);
+    });
+
+    Route::group(['prefix' => 'payments'], function(){
+        Route::get('', [App\Http\Controllers\Admin\Account\PaymentController::class,'index']);
+        Route::post('store', [App\Http\Controllers\Admin\Account\PaymentController::class,'store']);
+        Route::post('update/{id}', [App\Http\Controllers\Admin\Account\PaymentController::class,'update']);
+        Route::post('soft-delete', [App\Http\Controllers\Admin\Account\PaymentController::class,'soft_delete']);
+        Route::delete('destroy/{slug}', [App\Http\Controllers\Admin\Account\PaymentController::class,'destroy']);
+        Route::post('restore', [App\Http\Controllers\Admin\Account\PaymentController::class,'restore']);
+        Route::post('import', [App\Http\Controllers\Admin\Account\PaymentController::class,'import']);
+        Route::post('bulk-action', [App\Http\Controllers\Admin\Account\PaymentController::class, 'bulkAction']);
+        Route::get('{slug}', [App\Http\Controllers\Admin\Account\PaymentController::class,'show']);
     });
 
 });

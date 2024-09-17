@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Database\Seeders\Admin\Account\DailyBajarsTableSeeder;
+use Database\Seeders\Admin\Account\PaymentsTableSeeder;
 use Database\Seeders\Admin\BatchesTableSeeder;
 use Database\Seeders\Admin\DepartmentsTableSeeder;
 use Database\Seeders\Admin\HolidaysTableSeeder;
@@ -35,6 +36,7 @@ class DatabaseSeeder extends Seeder
             SettingsTableSeeder::class,
             HolidaysTableSeeder::class,
             DailyBajarsTableSeeder::class,
+            PaymentsTableSeeder::class,
         ]);
     }
 }

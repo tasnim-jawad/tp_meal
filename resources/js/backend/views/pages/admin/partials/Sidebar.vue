@@ -71,6 +71,15 @@
                             :label="`create`"/>
                     </dropdown-nav>
 
+                    <dropdown-nav :label="`Payment Management`" :icon="`fa-solid fa-users`">
+                        <dropdown-single-item
+                            :to="{name:`Allpayment`}"
+                            :label="`all`"/>
+                        <dropdown-single-item
+                            :to="{name:`Createpayment`}"
+                            :label="`create`"/>
+                    </dropdown-nav>
+
                 </ul>
 
                 <div class="line_divider"></div>
