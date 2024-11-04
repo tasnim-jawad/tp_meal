@@ -34,7 +34,7 @@ export const use_auth_store = defineStore("auth_store", {
                 let res = await window.axios.get("/user/check_user");
                 that.auth_info = res.data.user;
                 that.is_auth = 1;
-                
+
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     location.href = "/login";
